@@ -95,7 +95,7 @@ A personal fitness tracker that replaces a commercial app that has gotten worse 
 
 ## 10. Decisions to record (ADRs)
 - **ADR-001:** Mobile stack: Ionic + Angular + Capacitor (decided). Check background-GPS plugin options and licensing before Phase 3.
-- **ADR-002:** Local-first storage, with a backend and sync later (decided). Choose the on-device database.
+- **ADR-002:** Local-first storage, with a backend and sync later (decided). On-device database: NoSQL in IndexedDB via Dexie ([002-local-storage.md](decisions/002-local-storage.md)).
 - **ADR-003:** Food data: USDA FoodData Central for search, Open Food Facts for barcodes, cached locally (decided).
 - **ADR-004:** Data model ready for multiple users: an owner ID on every record (decided).
 - **ADR-005:** Testing and tooling: test runner, lint, typecheck commands, Claude hooks (to decide).
