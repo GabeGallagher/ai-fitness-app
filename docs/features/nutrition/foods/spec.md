@@ -16,7 +16,7 @@
 - [ ] 
 
 ## Related open questions
-- [SPEC.md §11](../../../SPEC.md#11-open-questions) Q6: if a cached or custom food's data changes, do past entries change?
+None open. (Editing a food: answered in [SPEC.md §5.1](../../../SPEC.md#51-foods).)
 
 ## Code
 _Not written yet._

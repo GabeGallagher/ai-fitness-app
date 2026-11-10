@@ -16,8 +16,7 @@
 - [ ] 
 
 ## Related open questions
-- [SPEC.md §11](../../../SPEC.md#11-open-questions) Q3: which day does a week start on?
-- [SPEC.md §11](../../../SPEC.md#11-open-questions) Q4: does a day end at midnight or at a custom time?
+None open. (Week starts Sunday, [SPEC.md §5.6](../../../SPEC.md#56-reviewing); day ends at midnight local, [SPEC.md §7](../../../SPEC.md#7-data-and-units).)
 
 ## Code
 _Not written yet._

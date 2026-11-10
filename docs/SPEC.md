@@ -26,6 +26,7 @@ A personal fitness tracker that replaces a commercial app that has gotten worse 
 | 2 | Body metrics | Notes only (§6) |
 | 3 | Cardio | Notes only (§6) |
 | 4 | Strength training | Notes only (§6) |
+| 1 | Daily tracking (exercise, steps, water, notes): manual entry | Notes only (§6) |
 | Later | Backend + sync (multiple devices, public release) | Not started |
 
 ## 5. Phase 1: Nutrition
@@ -37,6 +38,7 @@ A personal fitness tracker that replaces a commercial app that has gotten worse 
 - Any food the user logs is **cached locally**, so recents, favorites, and logging work offline.
 - Nutrients tracked: **calories, protein, carbohydrates, fat**. Nothing more for now.
 - Open Food Facts data requires attribution in the app (see its license).
+- **Editing a food** (a custom food is edited, or the database is corrected) doesn't change entries already logged. Entries logged after the change, including entries added to past days, use the new data.
 
 ### 5.2 Portions
 - Food can be logged by **weight in grams** (food scale) or by **package serving** ("1 serving", "2 bars"), using the serving definition from the food data.
@@ -44,8 +46,8 @@ A personal fitness tracker that replaces a commercial app that has gotten worse 
 
 ### 5.3 Meals and the daily log
 - Each entry in the day's log belongs to a **meal**.
-- Meal names are **user-defined** (e.g. "Breakfast", "Pre-workout", "Meal 4"), and the user can reorder them.
-- **Saved meals:** the user can save a group of foods and portions under a name and log the whole group in one action.
+- v1 has **four fixed meals**: Breakfast, Lunch, Dinner, Snacks. User-defined meal names and counts (e.g. "Pre-workout", "Meal 4") may come in a later iteration.
+- **Saved meals:** the user can save a group of foods and portions under a name and log the whole group in one action. Saved meals are enough for now; **recipes** (cooked in bulk, logged by the portion) are a possible later addition.
 
 ### 5.4 Logging shortcuts
 - **Recents and favorites:** foods logged recently, and foods marked as favorites, are reachable without searching.
@@ -53,26 +55,30 @@ A personal fitness tracker that replaces a commercial app that has gotten worse 
 - Quick-add (logging bare calories or macros with no food attached) is **not needed**.
 
 ### 5.5 Targets
-- There are **two target sets**: **Training day** and **Rest day**. Each sets calories, protein, carbs, and fat.
-- The user **marks each day manually** as training or rest. It may default to rest; see open questions.
+- There are **three day types**, each with its own target set: **High-intensity training day**, **Normal training day**, and **Rest day**.
+- Each target set has a **calorie target** and a **macro split** (carbs, protein, fat). The user can enter calories directly, or derive them from macros (4 kcal/g carbs and protein, 9 kcal/g fat). **If the two disagree, calories win.** Macro targets are kept as percentages of calories, and gram targets are derived from them.
+- **Calorie budget** for a day = that day's calorie target + exercise calories logged that day. Macro targets are a percentage of the budget, so exercise raises them in proportion.
+- The user **marks each day's type manually**. The default for a new day is a rest day.
 - Changing a target set must **not** rewrite history. Past days keep the targets that applied on that day.
 
 ### 5.6 Reviewing
 - **Today:** consumed vs target, and **remaining**, for calories and each macro.
 - **Per-meal breakdown:** how much each meal contributed.
-- **Weekly averages:** average daily intake for the week, compared with the targets for those days.
+- **Weekly averages:** average daily intake for the week, compared with the targets for those days. A week starts on **Sunday**; a setting to change this may come in a polish pass.
 - **Trend charts:** calories and macros over weeks or months.
 
 ## 6. Notes for later phases (from the interview; not specified yet)
 - **Body metrics:** bodyweight in **lb**, possibly body fat % and measurements.
-- **Cardio:** three ways to get data in: **manual entry**, **live GPS recording** on the phone (including in the background while the screen is off), and **import from Health Connect** (watch data).
+- **Cardio:** three ways to get data in: **manual entry**, **live GPS recording** on the phone (including in the background while the screen is off), and **import from Health Connect** (watch data). Health Connect is read-only: the app doesn't write nutrition or anything else to it.
 - **Strength:** exercises, sets, reps, weight in **lb**.
-- **Day type:** once workouts are logged, training vs rest could be set automatically. For now it is manual.
+- **Day type:** once workouts are logged, the day type could be set automatically. For now it is manual.
+- **Daily tracking** (separate feature, Phase 1): exercise, steps, water, and notes for a day. **Manual entry is in scope; device sync is out of scope** for now. Device sync will apply across several parts of the app, so it isn't tied to one feature. The nutrition daily log shows these values, and exercise calories add to the calorie budget (§5.5).
 
 ## 7. Data and units
 - **Units:** grams for food; lb for bodyweight and lifting; miles for cardio. Values are stored in SI units (g, kg, m) and converted for display.
+- **Day boundary:** a day runs from midnight to midnight, local time. A setting to change this may come in a polish pass.
 - **Storage:** a local database on the device is the source of truth. A backend and sync may come later; build so they can be added.
-- **Export:** a full export of the user's data to an open format, early in Phase 1. This is the only backup until sync exists.
+- **Export:** a full export of the user's data to **JSON**, early in Phase 1. This is the only backup until sync exists.
 
 ## 8. Non-goals
 - Ads, subscriptions, paywalls, upsells.
@@ -95,11 +101,13 @@ A personal fitness tracker that replaces a commercial app that has gotten worse 
 - **ADR-005:** Testing and tooling: test runner, lint, typecheck commands, Claude hooks (to decide).
 
 ## 11. Open questions
-1. **Saved meals vs recipes:** is a "saved meal" enough, or do you need **recipes**? A recipe is cooked in bulk, yields N servings, and is logged by the portion.
-2. **Default day type:** should a new day start as Rest, start as whatever yesterday was, or make you choose before logging?
-3. **Week boundary:** which day does a week start on, for weekly averages?
-4. **Day boundary:** does a "day" end at midnight local time, or at a custom time (for late-night eating)?
-5. **Targets:** do you enter calories directly, or derive them from macros (4/4/9 kcal per gram)? If both, which wins when they disagree?
-6. **Editing a logged food:** if a cached food's data changes (a custom food is edited, or the database is corrected), should past entries change or stay as logged?
-7. **Export format:** JSON (complete and easy to re-import), CSV (opens in a spreadsheet), or both?
-8. **Health Connect, nutrition direction:** should the app also *write* nutrition to Health Connect, or only read cardio data in Phase 3?
+All answered. Numbers are kept so links from feature specs still resolve.
+
+1. ~~Saved meals vs recipes~~ **Answered:** saved meals are enough; recipes maybe later. See §5.3.
+2. ~~Default day type~~ **Answered:** Rest. See §5.5.
+3. ~~Week boundary~~ **Answered:** Sunday. See §5.6.
+4. ~~Day boundary~~ **Answered:** midnight local. See §7.
+5. ~~Calories entered or derived from macros~~ **Answered:** both; calories win. See §5.5.
+6. ~~Editing a logged food~~ **Answered:** existing entries stay as logged. See §5.1.
+7. ~~Export format~~ **Answered:** JSON. See §7.
+8. ~~Health Connect direction~~ **Answered:** read only. See §6.

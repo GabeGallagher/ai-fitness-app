@@ -6,6 +6,7 @@ Personal Android fitness tracker. Ionic + Angular + Capacitor. Local-first.
 - Product overview: docs/SPEC.md. Docs layout and conventions: docs/README.md. Read both before starting feature work.
 - Build a subfeature only when its spec.md status is **Ready to build**, unless the owner says otherwise.
 - The owner writes specs; ask before changing requirements. Don't silently resolve open questions. Raise them.
+- Before writing code, do an overview of the target spec with the owner to ensure that all relevant information is included in the spec in a format that allows for the easiest implementation for the agent.
 
 ## Keep the docs in sync
 When you change code or docs, update in the same change:

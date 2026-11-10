@@ -4,7 +4,7 @@
 > Status: **Not started**
 
 ## Summary
-<!-- Training day and rest day target sets; the user marks each day's type. Past days keep the targets that applied then. -->
+<!-- Three day types (high-intensity training, normal training, rest), each with a calorie target and a macro split as percentages of calories. The user marks each day's type; new days default to rest. Calories can be entered directly or derived from macros; calories win when they disagree. Exercise calories add to the day's budget. Past days keep the targets that applied then. See SPEC.md §5.5. Until this is built, the Daily log uses 2,000 kcal at 50/20/30. -->
 
 ## Screens
 <!-- Embed mockups from images/ here. Caption each one with what's binding and what's only illustrative. -->
@@ -16,8 +16,7 @@
 - [ ] 
 
 ## Related open questions
-- [SPEC.md §11](../../../SPEC.md#11-open-questions) Q2: what day type does a new day start as?
-- [SPEC.md §11](../../../SPEC.md#11-open-questions) Q5: enter calories directly, or derive them from macros?
+None open. (Default day type and calories vs macros: answered in [SPEC.md §5.5](../../../SPEC.md#55-targets).)
 
 ## Code
 _Not written yet._
