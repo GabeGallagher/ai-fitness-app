@@ -1,7 +1,7 @@
 # Daily log
 
 > Part of [Nutrition](../README.md). Overview: [SPEC.md §5.3](../../../SPEC.md#53-meals-and-the-daily-log).
-> Status: **Drafting**
+> Status: **Building**
 
 ## Summary
 The daily log (called **Diet Dashboard** in the app menu) is the main nutrition screen. It summarizes one day's nutrition (calorie budget, calories consumed and left, calories per meal, and macros consumed vs target) and is the hub that links to the more detailed nutrition screens.
@@ -118,22 +118,40 @@ A **stub** is a placeholder page with a title and a way back. A **non-functional
 - The screen reads only local data, so it works fully offline ([SPEC.md §3](../../../SPEC.md#3-platform-and-users)).
 
 ## Definition of done
-- [ ] The screen opens on today (midnight-to-midnight local) and matches the mockup's layout, with the differences listed under the mockup.
-- [ ] The arrows, swiping (like turning a page), and the calendar each change the day, and every section then shows that day's data.
-- [ ] Any past or future day can be shown.
-- [ ] The day label matches the table in [Selecting the day](#selecting-the-day).
-- [ ] Calorie budget, meals, Left/Over, and the apple ring show the values defined in [Calories](#calories), with a 2,000 kcal default target.
-- [ ] Macro targets are derived from the calorie budget using the default 50/20/30 split, and the macro bars, pie, and legend show the values defined in [Macros](#macros).
-- [ ] The ring, macro bars, and week-strip bars are green under, yellow exactly on target, and red over.
-- [ ] The week strip keeps the selected day centered and shows each day's calorie bar and target dot on the scale defined in [Week strip](#week-strip).
-- [ ] The week-strip scale rule is isolated so it can later switch to average calories consumed.
-- [ ] Tapping a day in the week strip, or swiping the strip, selects a day.
-- [ ] Every row in [Navigation](#navigation) behaves as listed.
-- [ ] A day with nothing logged shows the empty state.
-- [ ] Everything works with no network connection.
+- [x] The screen opens on today (midnight-to-midnight local) and matches the mockup's layout, with the differences listed under the mockup.
+- [x] The arrows, swiping (like turning a page), and the calendar each change the day, and every section then shows that day's data.
+- [x] Any past or future day can be shown.
+- [x] The day label matches the table in [Selecting the day](#selecting-the-day).
+- [x] Calorie budget, meals, Left/Over, and the apple ring show the values defined in [Calories](#calories), with a 2,000 kcal default target.
+- [x] Macro targets are derived from the calorie budget using the default 50/20/30 split, and the macro bars, pie, and legend show the values defined in [Macros](#macros).
+- [x] The ring, macro bars, and week-strip bars are green under, yellow exactly on target, and red over.
+- [x] The week strip keeps the selected day centered and shows each day's calorie bar and target dot on the scale defined in [Week strip](#week-strip).
+- [x] The week-strip scale rule is isolated so it can later switch to average calories consumed.
+- [x] Tapping a day in the week strip, or swiping the strip, selects a day.
+- [x] Every row in [Navigation](#navigation) behaves as listed.
+- [x] A day with nothing logged shows the empty state.
+- [ ] Everything works with no network connection. (The screen makes no network requests and reads only the on-device database, but it hasn't been tried in airplane mode yet.)
 
 ## Related open questions
 None open.
 
 ## Code
-_Not written yet._
+**This subfeature** (`src/app/features/nutrition/daily-log/`):
+- [daily-log.page.ts](../../../../src/app/features/nutrition/daily-log/daily-log.page.ts), [.html](../../../../src/app/features/nutrition/daily-log/daily-log.page.html), [.scss](../../../../src/app/features/nutrition/daily-log/daily-log.page.scss): the screen, header, popovers (menu and calendar), swipe gesture, and links.
+- [daily-log.store.ts](../../../../src/app/features/nutrition/daily-log/daily-log.store.ts): selected day, day label, the week's entries (Dexie live query), and the week strip.
+- [day-summary.ts](../../../../src/app/features/nutrition/daily-log/day-summary.ts): budget, meals, Left/Over, status colors, macro targets, and the consumed split. Pure functions.
+- [week-strip-scale.ts](../../../../src/app/features/nutrition/daily-log/week-strip-scale.ts): the scale rule behind the `WEEK_STRIP_SCALE` token. To switch to average calories consumed, provide a different rule there.
+- `components/`: [apple-ring](../../../../src/app/features/nutrition/daily-log/components/apple-ring.component.ts), [macro-bars](../../../../src/app/features/nutrition/daily-log/components/macro-bars.component.ts), [macro-pie](../../../../src/app/features/nutrition/daily-log/components/macro-pie.component.ts), [week-strip](../../../../src/app/features/nutrition/daily-log/components/week-strip.component.ts).
+- Tests: `day-summary.spec.ts`, `week-strip-scale.spec.ts`, `daily-log.page.spec.ts`.
+
+**Shared code it added** (`src/app/core/`):
+- [db/app-db.ts](../../../../src/app/core/db/app-db.ts): the Dexie database, the `LogEntry` record (nutrients are a snapshot, per SPEC.md §5.1), the four meals, and the owner ID.
+- [db/log-entry.repository.ts](../../../../src/app/core/db/log-entry.repository.ts): reads log entries by date range.
+- [db/dev-seed.ts](../../../../src/app/core/db/dev-seed.ts): sample days for development builds only (`environment.production === false`). Production builds start empty.
+- [dates/local-date.ts](../../../../src/app/core/dates/local-date.ts) (+ spec): `YYYY-MM-DD` local days and day labels.
+- [nutrition/macros.ts](../../../../src/app/core/nutrition/macros.ts): macros and kcal per gram.
+- [stub/stub.page.ts](../../../../src/app/core/stub/stub.page.ts): the placeholder page that links open.
+
+**Elsewhere:**
+- [targets/day-targets.service.ts](../../../../src/app/features/nutrition/targets/day-targets.service.ts): placeholder that returns the 2,000 kcal, 50/20/30, rest-day default for every day.
+- App shell: [app.routes.ts](../../../../src/app/app.routes.ts) (this screen plus the stub routes), [app.config.ts](../../../../src/app/app.config.ts), [main.ts](../../../../src/main.ts), and theme colors in [variables.scss](../../../../src/theme/variables.scss).

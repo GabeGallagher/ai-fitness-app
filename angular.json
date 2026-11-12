@@ -125,11 +125,11 @@
   "schematics": {
     "@ionic/angular-toolkit:component": {
       "styleext": "scss",
-      "standalone": false
+      "standalone": true
     },
     "@ionic/angular-toolkit:page": {
       "styleext": "scss",
-      "standalone": false
+      "standalone": true
     }
   }
 }

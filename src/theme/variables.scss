@@ -1,2 +1,27 @@
-// For information on how to create your own theme, please refer to:
+// App colors. All are placeholders (daily-log spec: colors are not binding).
 // https://ionicframework.com/docs/theming/
+
+:root {
+  // Status: consumed vs target (daily-log spec, Status colors).
+  --ft-status-under: #2ecc71;
+  --ft-status-on: #f5c542;
+  --ft-status-over: #ef5350; // also the apple stem
+
+  // Week-strip target dots, by day type.
+  --ft-day-high: #ef5350;
+  --ft-day-normal: #f5c542;
+  --ft-day-rest: #2ecc71;
+
+  // Macros.
+  --ft-macro-carbs: #14c38e;
+  --ft-macro-protein: #a77cf2;
+  --ft-macro-fat: #fbc531;
+
+  // Surfaces and text.
+  --ft-accent: #5aa9e6;
+  --ft-card-bg: #1e1f22;
+  --ft-ring-track: #333438;
+  --ft-fab-secondary: #2f3a46;
+  --ft-muted: #9a9a9a;
+  --ft-muted-strong: #c8c8c8;
+}

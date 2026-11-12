@@ -32,6 +32,14 @@
  * https://ionicframework.com/docs/theming/dark-mode
  */
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+/* Always dark, matching the mockup. */
+@import "@ionic/angular/css/palettes/dark.always.css";
+
+/* The daily log uses horizontal swipes to change the day; stop browsers from
+   treating them as back/forward navigation. */
+html,
+body {
+  overscroll-behavior-x: none;
+}

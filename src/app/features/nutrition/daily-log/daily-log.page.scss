@@ -1,0 +1,149 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.25rem;
+
+  ion-button {
+    margin: 0;
+    --padding-start: 0.5rem;
+    --padding-end: 0.5rem;
+  }
+}
+
+.day-control {
+  flex: 1 1 auto;
+  min-width: 0;
+  --color: var(--ion-text-color);
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.day-label {
+  margin-left: 0.4rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+ion-content {
+  // Room to scroll the week strip above the floating buttons and Android's nav bar.
+  --padding-bottom: calc(6rem + var(--ion-safe-area-bottom, 0px));
+  overflow-x: hidden;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100% - 1rem);
+  margin: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 1rem;
+  background: var(--ft-card-bg);
+  font-size: 0.875rem;
+}
+
+.tap {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+}
+
+.name {
+  display: block;
+  color: var(--ft-muted-strong);
+}
+
+.value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  color: var(--ft-accent);
+  font-size: 1.5rem;
+}
+
+.budget {
+  align-self: center;
+  text-align: center;
+}
+
+.card-menu,
+.pie-menu {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  --color: var(--ft-muted);
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.stat {
+  text-align: center;
+}
+
+.view-all {
+  align-self: center;
+  text-transform: none;
+  --color: var(--ft-accent);
+}
+
+.section {
+  margin-top: 1rem;
+}
+
+.pie-row {
+  position: relative;
+}
+
+.strip {
+  flex: 1;
+  margin-top: 0.5rem;
+}
+
+.fabs {
+  right: 0.75rem;
+  bottom: calc(0.75rem + var(--ion-safe-area-bottom, 0px));
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.fab {
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 1rem;
+  color: var(--ft-accent);
+}
+
+.scan {
+  width: 3.2rem;
+  height: 3.2rem;
+  font-size: 1.6rem;
+  background: var(--ft-fab-secondary);
+}
+
+.add {
+  width: 4rem;
+  height: 4rem;
+  font-size: 2.2rem;
+  color: #fff;
+  background: var(--ft-accent);
+}

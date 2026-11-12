@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar>
+    <div class="toolbar">
+      <ion-button id="nav-menu-trigger" fill="clear" aria-label="Menu">
+        <ion-icon slot="icon-only" name="menu-outline" />
+      </ion-button>
+      <ion-button class="prev-day" fill="clear" aria-label="Previous day" (click)="store.previousDay()">
+        <ion-icon slot="icon-only" name="chevron-back" />
+      </ion-button>
+      <ion-button id="day-picker-trigger" fill="clear" class="day-control">
+        <ion-icon slot="start" name="calendar-outline" />
+        <span class="day-label">{{ store.dayLabel() }}</span>
+      </ion-button>
+      <ion-button class="next-day" fill="clear" aria-label="Next day" (click)="store.nextDay()">
+        <ion-icon slot="icon-only" name="chevron-forward" />
+      </ion-button>
+      <!-- Non-functional for now (daily-log spec, Navigation). -->
+      <ion-button fill="clear" aria-label="More options">
+        <ion-icon slot="icon-only" name="ellipsis-vertical" />
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-popover trigger="nav-menu-trigger" [dismissOnSelect]="true">
+  <ng-template>
+    <ion-list>
+      @for (link of menuLinks; track link.url) {
+        <ion-item button [detail]="false" (click)="go(link.url)">
+          <ion-label>{{ link.label }}</ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  </ng-template>
+</ion-popover>
+
+<ion-popover #dayPopover trigger="day-picker-trigger" size="auto">
+  <ng-template>
+    <ion-datetime
+      presentation="date"
+      [value]="store.selectedDay()"
+      (ionChange)="pickDay($event.detail, dayPopover)"
+    />
+  </ng-template>
+</ion-popover>
+
+<ion-content>
+  <div class="card">
+    <!-- Non-functional for now. -->
+    <ion-button class="card-menu" fill="clear" size="small" aria-label="Summary options">
+      <ion-icon slot="icon-only" name="ellipsis-vertical" />
+    </ion-button>
+
+    <button type="button" class="tap budget" (click)="go('/nutrition/targets')">
+      <span class="name">Calorie Budget</span>
+      <span class="value">{{ store.summary().budgetKcal | number: '1.0-0' }}</span>
+    </button>
+
+    <div class="summary">
+      <div class="side">
+        @for (item of trackingItems; track item.key) {
+          <button type="button" class="tap stat" (click)="go('/daily-tracking/' + item.key)">
+            <span class="name">{{ item.label }}</span>
+            <span class="value">
+              @if (item.showValue) {
+                0
+              }
+              @if (item.icon) {
+                <ion-icon [name]="item.icon" />
+              }
+            </span>
+          </button>
+        }
+      </div>
+
+      <app-apple-ring
+        [fill]="store.summary().fill"
+        [status]="store.summary().status"
+        [consumed]="store.summary().consumedKcal"
+        [remaining]="store.summary().remaining"
+      />
+
+      <div class="side">
+        @for (slot of mealSlots; track slot) {
+          <button type="button" class="tap stat" (click)="openMeal(slot)">
+            <span class="name">{{ mealLabels[slot] }}</span>
+            <span class="value">{{ store.summary().meals[slot] | number: '1.0-0' }}</span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Non-functional for now. -->
+    <ion-button class="view-all" fill="clear">View All Meals</ion-button>
+
+    <app-macro-bars class="section" [macros]="store.summary().macros" />
+
+    <div class="section pie-row">
+      <app-macro-pie [split]="store.summary().consumedSplit" [grams]="store.summary().consumedG" />
+      <!-- Non-functional for now. -->
+      <ion-button class="pie-menu" fill="clear" size="small" aria-label="Macro options">
+        <ion-icon slot="icon-only" name="ellipsis-vertical" />
+      </ion-button>
+    </div>
+
+    <app-week-strip class="strip" [days]="store.weekStrip()" (selectDay)="store.selectDay($event)" />
+  </div>
+
+  <div class="fabs" slot="fixed">
+    <!-- Non-functional for now: barcode scanning comes with the Foods subfeature. -->
+    <button type="button" class="fab scan" aria-label="Scan a barcode">
+      <ion-icon name="scan-outline" />
+    </button>
+    <button type="button" class="fab add" aria-label="Log food" (click)="go('/nutrition/log-food')">
+      <ion-icon name="add" />
+    </button>
+  </div>
+</ion-content>

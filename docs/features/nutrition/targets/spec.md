@@ -19,4 +19,4 @@
 None open. (Default day type and calories vs macros: answered in [SPEC.md §5.5](../../../SPEC.md#55-targets).)
 
 ## Code
-_Not written yet._
+- [day-targets.service.ts](../../../../src/app/features/nutrition/targets/day-targets.service.ts): placeholder added by the [Daily log](../daily-log/spec.md). It returns the default target (2,000 kcal, 50/20/30, rest day) for every day. This subfeature replaces its body; the `DayTarget` shape and `targetFor(day)` are what the Daily log depends on.
