@@ -198,7 +198,7 @@ None open.
 **Shared code it added** (`src/app/core/`):
 - [db/app-db.ts](../../../../src/app/core/db/app-db.ts): the Dexie database, the `LogEntry` record (nutrients are a snapshot, per SPEC.md §5.1), the four meals, and the owner ID.
 - [db/log-entry.repository.ts](../../../../src/app/core/db/log-entry.repository.ts): reads log entries by date range.
-- [db/dev-seed.ts](../../../../src/app/core/db/dev-seed.ts): sample days for development builds only (`environment.production === false`). Production builds start empty.
+- [db/dev-seed.ts](../../../../src/app/core/db/dev-seed.ts): sample days for development builds only (`environment.devSeed`). Production and e2e builds start empty.
 - [dates/local-date.ts](../../../../src/app/core/dates/local-date.ts) (+ spec): `YYYY-MM-DD` local days and day labels.
 - [nutrition/macros.ts](../../../../src/app/core/nutrition/macros.ts): macros and kcal per gram.
 - [stub/stub.page.ts](../../../../src/app/core/stub/stub.page.ts): the placeholder page that links open.

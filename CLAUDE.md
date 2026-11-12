@@ -8,6 +8,10 @@ Personal Android fitness tracker. Ionic + Angular + Capacitor. Local-first.
 - The owner writes specs; ask before changing requirements. Don't silently resolve open questions. Raise them.
 - Before writing code, do an overview of the target spec with the owner to ensure that all relevant information is included in the spec in a format that allows for the easiest implementation for the agent.
 
+## Verification
+- `npm run verify` runs lint, typecheck, and every automated test. A Stop hook (.claude/settings.json) runs it before you finish a task and blocks you if it fails. Fix the failures; don't work around the hook.
+- Add every new automated test layer to `npm run verify` (docs/decisions/005-testing.md).
+
 ## Keep the docs in sync
 When you change code or docs, update in the same change:
 - The status line in the subfeature's spec.md, and the matching row in its feature README.md.
