@@ -14,6 +14,10 @@
 
 ## Definition of done
 - [ ] 
+- [ ] Every item above is covered in [Verification](#verification), and every test listed there passes.
+
+## Verification
+_Not written yet._ <!-- Claude proposes this alongside the code: one row per done item. Format and layers: ../../_template.md and ../../../decisions/005-testing.md. -->
 
 ## Related open questions
 None open. (Default day type and calories vs macros: answered in [SPEC.md §5.5](../../../SPEC.md#55-targets).)

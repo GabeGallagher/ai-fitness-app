@@ -12,5 +12,6 @@ Personal Android fitness tracker. Ionic + Angular + Capacitor. Local-first.
 When you change code or docs, update in the same change:
 - The status line in the subfeature's spec.md, and the matching row in its feature README.md.
 - The **Code** section of the spec, with the paths you created or changed.
+- The **Verification** section of the spec, with the tests you added, changed, or removed (layers and conventions: docs/decisions/005-testing.md).
 - The feature README's subfeature table, if you add, rename, or remove a subfeature.
 - docs/SPEC.md §11 Open questions, if one gets answered (move the answer into the right spec).

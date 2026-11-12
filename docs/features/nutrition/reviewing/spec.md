@@ -14,6 +14,10 @@
 
 ## Definition of done
 - [ ] 
+- [ ] Every item above is covered in [Verification](#verification), and every test listed there passes.
+
+## Verification
+_Not written yet._ <!-- Claude proposes this alongside the code: one row per done item. Format and layers: ../../_template.md and ../../../decisions/005-testing.md. -->
 
 ## Related open questions
 None open. (Week starts Sunday, [SPEC.md §5.6](../../../SPEC.md#56-reviewing); day ends at midnight local, [SPEC.md §7](../../../SPEC.md#7-data-and-units).)

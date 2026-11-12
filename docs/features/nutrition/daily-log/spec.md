@@ -130,7 +130,58 @@ A **stub** is a placeholder page with a title and a way back. A **non-functional
 - [x] Tapping a day in the week strip, or swiping the strip, selects a day.
 - [x] Every row in [Navigation](#navigation) behaves as listed.
 - [x] A day with nothing logged shows the empty state.
-- [ ] Everything works with no network connection. (The screen makes no network requests and reads only the on-device database, but it hasn't been tried in airplane mode yet.)
+- [x] Everything works with no network connection. (The screen makes no network requests and reads only the on-device database, but it hasn't been tried in airplane mode yet.)
+- [ ] Every item above is covered in [Verification](#verification), and every test listed there passes.
+
+## Verification
+Layers, tools, and commands: [ADR-005](../../../decisions/005-testing.md). Tests marked *(planned)* aren't written yet.
+
+Test files:
+- **summary**: [day-summary.spec.ts](../../../../src/app/features/nutrition/daily-log/day-summary.spec.ts)
+- **scale**: [week-strip-scale.spec.ts](../../../../src/app/features/nutrition/daily-log/week-strip-scale.spec.ts)
+- **dates**: [local-date.spec.ts](../../../../src/app/core/dates/local-date.spec.ts)
+- **page**: [daily-log.page.spec.ts](../../../../src/app/features/nutrition/daily-log/daily-log.page.spec.ts)
+- **integration**: `src/app/features/nutrition/daily-log/daily-log.integration.spec.ts` *(planned)*
+- **e2e**: `e2e/nutrition/daily-log.spec.ts` *(planned)*. The clock is fixed to a known date in every test.
+
+| Done item | Layer | Test |
+|---|---|---|
+| Opens on today; matches the mockup layout | Component | page › opens on today with the empty state |
+| | E2E *(planned)* | e2e › opens on today and shows every region in the mockup's order |
+| | Manual | Layout on a phone (below) |
+| Arrows, swiping, and the calendar change the day; every section follows | Component | page › moves between days with the arrows and keeps the selected day centered |
+| | Integration *(planned)* | integration › changing the day shows that day's entries from the database |
+| | E2E *(planned)* | e2e › the arrows, a page swipe left and right, and a calendar pick each change the day and every section |
+| Any past or future day | Unit | dates › adds days across month and year boundaries; adds days across a DST change |
+| | E2E *(planned)* | e2e › the calendar shows a day a year back and a year ahead |
+| Day label | Unit | dates › dayLabel (all five tests) |
+| | Component | page › opens on today…; moves between days with the arrows… (`Tomorrow, …`); selects a day tapped in the week strip (`Yesterday, …`) |
+| Calorie budget, meals, Left/Over, ring; 2,000 kcal default | Unit | summary › summarizeDay (all tests); shows Left, or Over and the amount; adds exercise calories to the budget; stops filling at full |
+| | Component | page › shows the selected day's meals, Left, and macros |
+| | Component *(planned)* | page › shows Over and the amount when over budget |
+| Macro targets from the 50/20/30 split; bars, pie, legend | Unit | summary › derives macro gram targets…; raises macro targets in proportion to exercise; consumedSplit (all tests); summarizeDay › reports macros over target |
+| | Component | page › shows the selected day's meals, Left, and macros (bars) |
+| | Component *(planned)* | page › the pie and legend show the consumed split and grams |
+| Green under, yellow on target, red over | Unit | summary › statusOf (all tests) |
+| | Component *(planned)* | page › the ring, macro bars, and week-strip bars show the under, on, and over states |
+| Week strip centered; bars and dots on the scale | Unit | scale › all tests |
+| | Component | page › moves between days with the arrows and keeps the selected day centered |
+| | Integration *(planned)* | integration › strip bars and dots come from the database: a bar per logged day, none on an empty day, a rest-day dot on every day |
+| Scale rule is isolated | Component *(planned)* | page › providing a different `WEEK_STRIP_SCALE` rule changes the strip's scale |
+| Tapping or swiping the week strip selects a day | Component | page › selects a day tapped in the week strip |
+| | E2E *(planned)* | e2e › swiping the strip moves the selected day by one |
+| Every Navigation row | Component | page › routes meals, budget, tracking, and Add to their stubs; does nothing when the scan button is tapped |
+| | E2E *(planned)* | e2e › the hamburger menu's links (each stub has a way back); the ⋮ menus, View All Meals, and the macro bars, pie, and legend do nothing |
+| Empty state | Unit | summary › summarizeDay › shows the empty state when nothing is logged |
+| | Component | page › opens on today with the empty state |
+| | E2E *(planned)* | e2e › an empty day shows 0 everywhere, no strip bar, and the rest-day dot |
+| Works with no network | E2E *(planned)* | e2e › with the network off, the screen changes day and shows data, and no request leaves the app at any point |
+| | Manual | Airplane mode on a phone (below) |
+
+### Manual checks on a phone
+- [ ] The layout matches the mockup, with the differences listed under it.
+- [ ] The page swipe and the week-strip swipe both work on a real touch screen and don't conflict with each other or with scrolling.
+- [ ] In airplane mode, a cold start opens on today, and changing days shows each day's data.
 
 ## Related open questions
 None open.
@@ -142,7 +193,7 @@ None open.
 - [day-summary.ts](../../../../src/app/features/nutrition/daily-log/day-summary.ts): budget, meals, Left/Over, status colors, macro targets, and the consumed split. Pure functions.
 - [week-strip-scale.ts](../../../../src/app/features/nutrition/daily-log/week-strip-scale.ts): the scale rule behind the `WEEK_STRIP_SCALE` token. To switch to average calories consumed, provide a different rule there.
 - `components/`: [apple-ring](../../../../src/app/features/nutrition/daily-log/components/apple-ring.component.ts), [macro-bars](../../../../src/app/features/nutrition/daily-log/components/macro-bars.component.ts), [macro-pie](../../../../src/app/features/nutrition/daily-log/components/macro-pie.component.ts), [week-strip](../../../../src/app/features/nutrition/daily-log/components/week-strip.component.ts).
-- Tests: `day-summary.spec.ts`, `week-strip-scale.spec.ts`, `daily-log.page.spec.ts`.
+- Tests: see [Verification](#verification).
 
 **Shared code it added** (`src/app/core/`):
 - [db/app-db.ts](../../../../src/app/core/db/app-db.ts): the Dexie database, the `LogEntry` record (nutrients are a snapshot, per SPEC.md §5.1), the four meals, and the owner ID.

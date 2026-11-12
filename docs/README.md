@@ -41,3 +41,5 @@ docs/
 ## Status values
 
 Each spec starts with a status line: **Not started**, **Drafting**, **Ready to build**, **Building**, or **Done**. Claude builds a subfeature only when its spec says **Ready to build**, unless asked otherwise.
+
+A subfeature is **Done** only when every Definition of done item is covered in the spec's **Verification** section, every test listed there passes, and the manual phone checks are ticked ([ADR-005](decisions/005-testing.md)).

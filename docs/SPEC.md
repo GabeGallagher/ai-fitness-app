@@ -98,7 +98,7 @@ A personal fitness tracker that replaces a commercial app that has gotten worse 
 - **ADR-002:** Local-first storage, with a backend and sync later (decided). On-device database: NoSQL in IndexedDB via Dexie ([002-local-storage.md](decisions/002-local-storage.md)).
 - **ADR-003:** Food data: USDA FoodData Central for search, Open Food Facts for barcodes, cached locally (decided).
 - **ADR-004:** Data model ready for multiple users: an owner ID on every record (decided).
-- **ADR-005:** Testing and tooling: test runner, lint, typecheck commands, Claude hooks (to decide).
+- **ADR-005:** Testing and verification: unit, component, and integration tests in Vitest; E2E in Playwright on Chromium with phone emulation; a Verification section in every spec (decided). CI and Claude hooks still to decide ([005-testing.md](decisions/005-testing.md)).
 
 ## 11. Open questions
 All answered. Numbers are kept so links from feature specs still resolve.

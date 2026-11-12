@@ -14,6 +14,10 @@
 
 ## Definition of done
 - [ ] 
+- [ ] Every item above is covered in [Verification](#verification), and every test listed there passes.
+
+## Verification
+_Not written yet._ <!-- Claude proposes this alongside the code: one row per done item. Format and layers: ../../_template.md and ../../../decisions/005-testing.md. -->
 
 ## Related open questions
 - **Saved meals:** do they belong on this page, in [Shortcuts](../shortcuts/spec.md), or in their own subfeature? To be decided when logging meals is specified.
