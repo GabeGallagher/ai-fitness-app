@@ -1,3 +1,4 @@
+import type { Provider } from '@angular/core';
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { NavController, provideIonicAngular } from '@ionic/angular';
@@ -7,6 +8,7 @@ import type { LogEntry } from '../../../core/db/app-db';
 import { addDays, todayLocal } from '../../../core/dates/local-date';
 import { LogEntryRepository } from '../../../core/db/log-entry.repository';
 import { DailyLogPage } from './daily-log.page';
+import { WEEK_STRIP_SCALE } from './week-strip-scale';
 
 class FakeLogEntryRepository {
   readonly entries$ = new BehaviorSubject<LogEntry[]>([]);
@@ -30,7 +32,13 @@ describe('DailyLogPage', () => {
       (el.textContent ?? '').replace(/\s+/g, ' ').trim(),
     );
 
-  beforeEach(async () => {
+  /** Inline style values of each element matched, e.g. the color var a bar is drawn with. */
+  const styles = (selector: string, property: string) =>
+    Array.from((fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>(selector)).map((el) =>
+      el.style.getPropertyValue(property),
+    );
+
+  async function render(extraProviders: Provider[] = []): Promise<void> {
     repo = new FakeLogEntryRepository();
     navigateForward.mockReset();
     await TestBed.configureTestingModule({
@@ -40,11 +48,14 @@ describe('DailyLogPage', () => {
         provideRouter([]),
         { provide: LogEntryRepository, useValue: repo },
         { provide: NavController, useValue: { navigateForward } },
+        ...extraProviders,
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(DailyLogPage);
     await fixture.whenStable();
-  });
+  }
+
+  beforeEach(() => render());
 
   it('opens on today with the empty state', () => {
     expect(text('.day-label')).toEqual(['Today']);
@@ -64,6 +75,60 @@ describe('DailyLogPage', () => {
       'Protein', '20%', '24g', 'left 76g',
       'Fat', '30%', '33g', 'left 34g',
     ]);
+  });
+
+  it('shows Over and the amount when over budget', async () => {
+    repo.entries$.next([entry(today, 'dinner', 2120, 0, 0, 0)]);
+    await fixture.whenStable();
+
+    expect(text('app-apple-ring .kind')).toEqual(['Over']);
+    expect(text('app-apple-ring .amount')).toEqual(['120']);
+  });
+
+  it('the pie and legend show the consumed split and grams', async () => {
+    // Empty: a blank pie, and 0 g of each macro.
+    expect(fixture.nativeElement.querySelectorAll('app-macro-pie circle.empty').length).toBe(1);
+    expect(text('app-macro-pie dd')).toEqual(['0g', '0g', '0g']);
+
+    // The mockup: 66 g carbs, 24 g protein, 33 g fat is 40% / 15% / 45% of macro calories.
+    repo.entries$.next([entry(today, 'breakfast', 660, 66, 24, 33)]);
+    await fixture.whenStable();
+
+    expect(text('app-macro-pie text')).toEqual(['40%', '15%', '45%']);
+    expect(text('app-macro-pie dt')).toEqual(['Carbs', 'Protein', 'Fat']);
+    expect(text('app-macro-pie dd')).toEqual(['66g', '24g', '33g']);
+  });
+
+  it('the ring, macro bars, and week-strip bars show the under, on, and over states', async () => {
+    repo.entries$.next([
+      // Today: calories exactly on the 2,000 budget; carbs on (250 g), protein under (100 g), fat over (67 g).
+      entry(today, 'lunch', 2000, 250, 50, 80),
+      entry(addDays(today, -1), 'lunch', 2500, 0, 0, 0), // over
+      entry(addDays(today, -2), 'lunch', 1000, 0, 0, 0), // under
+    ]);
+    await fixture.whenStable();
+
+    expect(styles('app-apple-ring .progress', 'stroke')).toEqual(['var(--ft-status-on)']);
+    expect(styles('app-macro-bars .fill', 'background')).toEqual([
+      'var(--ft-status-on)',
+      'var(--ft-status-under)',
+      'var(--ft-status-over)',
+    ]);
+    // The strip's seven columns, three days either side of today; days with nothing logged have no bar.
+    const bars = Array.from(fixture.nativeElement.querySelectorAll('app-week-strip .col') as NodeListOf<HTMLElement>).map(
+      (col) => col.querySelector<HTMLElement>('.bar')?.style.getPropertyValue('background') ?? null,
+    );
+    expect(bars).toEqual([null, 'var(--ft-status-under)', 'var(--ft-status-over)', 'var(--ft-status-on)', null, null, null]);
+  });
+
+  it("providing a different WEEK_STRIP_SCALE rule changes the strip's scale", async () => {
+    // Default rule: the midway line is the average budget (2,000), so each day's 2,000 dot sits at half height.
+    expect(styles('app-week-strip .dot', 'bottom')).toEqual(Array(7).fill('50%'));
+
+    // A rule putting the midway line at 1,000 puts the 2,000 dots at the top (2 × midway).
+    TestBed.resetTestingModule();
+    await render([{ provide: WEEK_STRIP_SCALE, useValue: () => 1000 }]);
+    expect(styles('app-week-strip .dot', 'bottom')).toEqual(Array(7).fill('100%'));
   });
 
   it('moves between days with the arrows and keeps the selected day centered', async () => {

@@ -28,5 +28,14 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  /* Shared options only. Each file is checked by the config below that includes it:
+     the app, the Vitest tests (with Vitest's global describe/it/expect), or the
+     Playwright tests. Editors use these references to pick the right one. */
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.spec.json" },
+    { "path": "./e2e/tsconfig.json" }
+  ]
 }

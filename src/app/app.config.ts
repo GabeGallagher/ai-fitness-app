@@ -11,7 +11,8 @@ import { installE2eHooks } from './core/e2e/e2e-hooks';
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(),
+    // Only ever force it on: Ionic's default already turns it on in the Android app.
+    provideIonicAngular(environment.browserBackButton ? { hardwareBackButton: true } : {}),
     provideRouter(routes, withPreloading(PreloadAllModules), withComponentInputBinding()),
     // Development builds only (not production or e2e). Not awaited: startup never waits
     // on the database, and the daily log's live query shows the sample days as soon as

@@ -10,6 +10,8 @@
     "test": "ng test",
     "test:integration": "ng test --watch=false --include \"**/*.integration.spec.ts\"",
     "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "e2e:headed": "playwright test --headed --workers=1",
     "lint": "ng lint",
     "typecheck": "ngc -p tsconfig.app.json --noEmit && tsc -p tsconfig.spec.json --noEmit && tsc -p e2e/tsconfig.json",
     "verify": "npm run lint && npm run typecheck && ng test --watch=false && npm run e2e"

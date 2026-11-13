@@ -27,6 +27,11 @@ Every E2E test runs in **desktop Chromium with phone emulation**, not on an Andr
 - Every test fixes the clock (`page.clock`) to a known date, in a fixed time zone (America/New_York), so day labels and the week strip are deterministic.
 - Tests open the app with `openApp(page, { today, entries })` from [e2e/support/app.ts](../../e2e/support/app.ts). [e2e/harness.spec.ts](../../e2e/harness.spec.ts) checks the setup itself: no dev seed, seeding works, the clock is fixed, and tests don't share a database.
 - Config: [playwright.config.ts](../../playwright.config.ts). Playwright starts `ng serve --configuration e2e` on port 4300, or reuses one already running there.
+- **Android back button:** a desktop browser has none, so Ionic leaves its back-button handling off there. The e2e build turns it on (`browserBackButton: true`), and `pressAndroidBack(page)` ([e2e/support/gestures.ts](../../e2e/support/gestures.ts)) sends the `backbutton` event Capacitor sends on a phone. Leaving the app happens only on the phone, so it's a manual check.
+
+### TypeScript configs
+- The root [tsconfig.json](../../tsconfig.json) holds shared options and lists the three configs that check files: [tsconfig.app.json](../../tsconfig.app.json) (the app), [tsconfig.spec.json](../../tsconfig.spec.json) (Vitest tests, with Vitest's global `describe`/`it`/`expect`), and [e2e/tsconfig.json](../../e2e/tsconfig.json) (Playwright tests). Editors use that list to check each file with the right one.
+- Vitest tests use those globals without importing them; Playwright tests import `test` and `expect` from `@playwright/test`.
 
 ### Integration test setup
 - [src/test-setup.ts](../../src/test-setup.ts) loads `fake-indexeddb/auto`, so Vitest tests have an in-memory IndexedDB.
@@ -44,10 +49,12 @@ Every E2E test runs in **desktop Chromium with phone emulation**, not on an Andr
 | `npm run typecheck` | `ngc` on the app, which also checks templates (`strictTemplates`), and `tsc` on the spec files and the E2E tests | Exists |
 | `npm test` | Unit, component, and integration tests (Vitest), in watch mode | Exists |
 | `npm run test:integration` | Integration tests only, once | Exists |
-| `npm run e2e` | Playwright E2E tests against the `e2e` build | Exists |
+| `npm run e2e` | Playwright E2E tests against the `e2e` build, headless | Exists |
+| `npm run e2e:ui` | Playwright's UI mode: pick tests, watch them run, step through each action with before/after snapshots | Exists |
+| `npm run e2e:headed` | The E2E tests in a visible browser window, one at a time. Add `-- -g "calendar"` to run only matching tests | Exists |
 | `npm run verify` | Everything automated, run once: lint, typecheck, Vitest, and Playwright | Exists |
 
-First-time setup on a new machine: `npm install`, then `npx playwright install chromium` (Playwright's browser isn't installed by npm).
+Setting up a new computer, including Playwright's browser: [development.md](../development.md).
 
 ### Claude hook
 A **Stop hook** ([.claude/settings.json](../../.claude/settings.json), script [.claude/hooks/verify-on-stop.mjs](../../.claude/hooks/verify-on-stop.mjs)) runs `npm run verify` whenever Claude is about to finish a task.

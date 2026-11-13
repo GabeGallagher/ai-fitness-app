@@ -12,6 +12,11 @@ Personal Android fitness tracker. Ionic + Angular + Capacitor. Local-first.
 - `npm run verify` runs lint, typecheck, and every automated test. A Stop hook (.claude/settings.json) runs it before you finish a task and blocks you if it fails. Fix the failures; don't work around the hook.
 - Add every new automated test layer to `npm run verify` (docs/decisions/005-testing.md).
 
+## Setup and the phone
+- The owner works on this app from more than one computer. On a new one, follow docs/development.md (tools, `npm install`, `npx playwright install chromium`).
+- Before the owner tests anything on the phone, confirm the phone has the current build: `adb devices`, then compare the installed app's `lastUpdateTime` with the latest change (docs/development.md, Checking what's on the phone). `npx cap sync android` doesn't install; `npx cap run android` does.
+- If installing fails with `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, the phone's copy was signed by another computer. Uninstalling fixes it but deletes the app's on-device data, so ask the owner first.
+
 ## Keep the docs in sync
 When you change code or docs, update in the same change:
 - The status line in the subfeature's spec.md, and the matching row in its feature README.md.

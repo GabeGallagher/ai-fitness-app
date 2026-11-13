@@ -7,6 +7,7 @@ How the project docs are organized. The product overview is [SPEC.md](SPEC.md).
 ```
 docs/
   SPEC.md            # what and why: purpose, principles, phases, open questions
+  development.md     # setting up a computer, running the app, installing it on the phone
   decisions/         # technical decisions (ADRs), one file each: 001-mobile-stack.md, ...
   images/            # images that span features (navigation, theme, overall look)
   features/

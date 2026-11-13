@@ -3,4 +3,5 @@
 export const environment = {
   production: false,
   devSeed: false,
+  browserBackButton: true,
 };

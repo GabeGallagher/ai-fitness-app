@@ -6,6 +6,11 @@ export const environment = {
   production: false,
   /** Fill an empty database with sample days (core/db/dev-seed.ts). */
   devSeed: true,
+  /**
+   * Turn on Ionic's back-button handling in a desktop browser, so E2E tests can send
+   * the `backbutton` event Capacitor sends on a phone. On the phone it's on anyway.
+   */
+  browserBackButton: false,
 };
 
 /*

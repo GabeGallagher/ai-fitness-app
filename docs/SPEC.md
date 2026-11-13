@@ -17,6 +17,10 @@ A personal fitness tracker that replaces a commercial app that has gotten worse 
 - **Platform:** Android phone only, used mostly at the gym or on the go. No iOS, desktop, or web front end planned.
 - **Users:** a single user for now. The app may go public later, so every user-owned record carries a user/owner ID from day one, even though v1 has no accounts or login screen.
 - **Connectivity:** everything works offline **except** food database search and barcode lookup, which need a network connection.
+- **Android back button** (the system button or gesture), on every screen:
+  1. If a popup, menu, modal, or dropdown is open, it closes that, and nothing else.
+  2. Otherwise it goes back to the previous screen, as that screen was left (e.g. the same day on the daily log).
+  3. On a screen with nowhere to go back to (the daily log, when opened from the launcher), it leaves the app, to the background.
 
 ## 4. Scope by phase
 
